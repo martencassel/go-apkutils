@@ -1,8 +1,11 @@
 package apkutils
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"fmt"
 	"io"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -10,6 +13,7 @@ import (
 // ApkIndex is an APKINDEX header and payload
 type ApkIndex struct {
 	PullChecksum string
+	f            io.Reader
 }
 
 // ReadIndex reads the APKINDEX file.
@@ -22,6 +26,7 @@ func ReadIndex(f io.Reader) *apkIndex {
 }
 
 type ApkFile struct {
+	f            io.Reader
 	PullChecksum string
 	PkgInfo      *PkgInfo
 	PkgFileSize  int
@@ -53,4 +58,41 @@ func ReadApkFile(f io.Reader) (*ApkFile, error) {
 		return nil, err
 	}
 	return apk, nil
+}
+
+func createTarArchive(filename string, buf io.Writer) error {
+	gw := gzip.NewWriter(buf)
+	defer gw.Close()
+	tw := tar.NewWriter(gw)
+	defer tw.Close()
+	err := addToArchive(tw, filename)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func addToArchive(tw *tar.Writer, filename string) error {
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	info, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	header, err := tar.FileInfoHeader(info, info.Name())
+	if err != nil {
+		return err
+	}
+	header.Name = filename
+	err = tw.WriteHeader(header)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(tw, file)
+	if err != nil {
+		return err
+	}
+	return nil
 }

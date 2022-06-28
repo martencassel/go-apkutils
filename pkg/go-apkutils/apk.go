@@ -25,7 +25,13 @@ func readApkFile(f io.Reader) (*ApkFile, error) {
 			offsets = append(offsets, i)
 		}
 	}
+	// length := len(bytes_)
+	//	block1 := bytes_[offsets[0]:offsets[1]]
 	block2 := bytes_[offsets[1]:offsets[2]]
+	//	block3 := bytes_[offsets[2]:length]
+	// ioutil.WriteFile("block1.gz", block1, 0644)
+	// ioutil.WriteFile("block2.gz", block2, 0644)
+	// ioutil.WriteFile("block3.gz", block3, 0644)
 	Sha1CheckSum := sha1.Sum(block2)
 	str := base64.StdEncoding.EncodeToString(Sha1CheckSum[:20])
 	pullChecksum = fmt.Sprintf("Q1%s", str)

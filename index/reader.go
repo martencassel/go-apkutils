@@ -17,7 +17,7 @@ func ReadApkIndex(f io.Reader) (*apkutils.ApkIndex, error) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(f)
 	// If the file is gzipped tar, we need to extract APKINDEX from the tar.
-	if readGzipHeader(buf.Bytes()) {
+	if apkutils.ReadGzipHeader(buf.Bytes()) {
 		gr := bytes.NewReader(buf.Bytes())
 		uncompressedStream, err := gzip.NewReader(gr)
 		if err != nil {
@@ -160,11 +160,4 @@ func parseApkIndex(buf *bytes.Buffer) *apkutils.ApkIndex {
 		v = append(v, value)
 	}
 	return &apkutils.ApkIndex{Entries: v}
-}
-
-func readGzipHeader(buf []byte) bool {
-	if buf[0] != apkutils.GzipID1 || buf[1] != apkutils.GzipID2 || buf[2] != apkutils.GzipDeflate {
-		return false
-	}
-	return true
 }

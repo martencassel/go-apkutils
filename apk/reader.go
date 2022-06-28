@@ -34,7 +34,7 @@ func readApkFile(f io.Reader) (*apkutils.ApkFile, error) {
 	bytes_ := buf.Bytes()
 	var offsets []int
 	for i, _ := range bytes_ {
-		if readGzipHeader(bytes_[i:]) {
+		if apkutils.ReadGzipHeader(bytes_[i:]) {
 			offsets = append(offsets, i)
 		}
 	}
@@ -131,11 +131,4 @@ func readPkgInfo(buf *bytes.Buffer) (*apkutils.PkgInfo, error) {
 	pkgInfo.PkgDepends = depends
 	pkgInfo.PkgProvides = provides
 	return pkgInfo, nil
-}
-
-func readGzipHeader(buf []byte) bool {
-	if buf[0] != apkutils.GzipID1 || buf[1] != apkutils.GzipID2 || buf[2] != apkutils.GzipDeflate {
-		return false
-	}
-	return true
 }

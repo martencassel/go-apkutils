@@ -42,7 +42,7 @@ There is a highlevel `Apk` and `ApkIndex` struct that provides access to package
         "strace-5.17-r0.apk",
    }
    // Create APKINDEX file
-   f, err := os.OpenFile("./testdata/APKINDEX", os.O_RDWR|os.O_CREATE, 0644)
+   f, err := os.OpenFile("APKINDEX", os.O_RDWR|os.O_CREATE, 0644)
    if err != nil {
         log.Fatalln("Error opening APKINDEX file:", err)
    }

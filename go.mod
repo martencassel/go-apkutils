@@ -1,4 +1,4 @@
-module github.com/martencassel/go-proxy-tester
+module github.com/martencassel/go-apkutils
 
 go 1.18
 

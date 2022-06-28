@@ -14,6 +14,7 @@ import (
 // readApkFile reads the APK file and parses metadata from .PKGINFO and extracts the pull checksum and its size.
 func readApkFile(f io.Reader) (*ApkFile, error) {
 	var pkgInfo *PkgInfo
+	// https://stackoverflow.com/questions/38837679/alpine-apk-package-repositories-how-are-the-checksums-calculated
 	var pullChecksum string
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(f)

@@ -1,11 +1,12 @@
 # Go alpine APK Utils
 
-
 go-apkutils is a library written in [go](http://golang.org) for parsing and extracting content from [APKs](https://wiki.alpinelinux.org/wiki/Package_management).
 
 ## Overview
 
-go-apkutils provides a few interfaces for handling alpine APK packages and APKINDEX files. There is a highlevel `Apk` and `ApkIndex` struct that provides access to APK and APKINDEX information.
+go-apkutils provides a few interfaces for handling alpine APK packages and APKINDEX files. 
+
+There is a highlevel `Apk` and `ApkIndex` struct that provides access to APK and APKINDEX information.
 
 ## 1. Extract metadata from an apk package file
 ```go

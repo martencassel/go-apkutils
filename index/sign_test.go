@@ -42,7 +42,7 @@ func TestSignApkIndex(t *testing.T) {
 		f.Close()
 
 		// Put the signature in a tar file withouth the end-of-tar record at the end of the file.
-		sigTarFileWithouthEOF, err := os.Create("signature_w_eof.tar")
+		sigTarFileWithouthEOF, err := os.Create("/tmp/signature_w_eof.tar")
 		if err != nil {
 			t.Fatal("Error opening signature.tar.gz:", err)
 		}
@@ -66,7 +66,7 @@ func TestSignApkIndex(t *testing.T) {
 		tarWriter.WriteHeader(hdr)
 		tarWriter.Write(sigFileData)
 		// Skip writing a EOF tar records
-		f, err = os.Open("signature_w_eof.tar")
+		f, err = os.Open("/tmp/signature_w_eof.tar")
 		if err != nil {
 			t.Fatal("Error opening signature_w_eof.tar:", err)
 		}
@@ -85,14 +85,14 @@ func TestSignApkIndex(t *testing.T) {
 		}
 		gzw.Flush()
 		gzw.Close()
-		out, err := os.Create("signature.tar.gz")
+		out, err := os.Create("/tmp/signature.tar.gz")
 		if err != nil {
 			t.Fatal("Error creating signature.tar.gz:", err)
 		}
 		out.Write(buf_signatureTarGz.Bytes())
 		out.Close()
 
-		outF, err := os.Create("APKINDEX.signed.tar.gz")
+		outF, err := os.Create("/tmp/APKINDEX.signed.tar.gz")
 		if err != nil {
 			t.Fatal("Error creating APKINDEX.signed.tar.gz:", err)
 		}
@@ -106,6 +106,7 @@ func CreateApkIndexUnsigned(pkg ...io.Reader) (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("apk is nil")
 		}
 	}
+	return nil, nil
 }
 
 func WriteApkIndex(w io.Writer, signatureTarGz *bytes.Buffer, unsignedApkIndexTarGz *bytes.Buffer) {

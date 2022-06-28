@@ -1,5 +1,3 @@
-# ...Work-In-progress....
-
 # Go alpine APK Utils
 
 

@@ -15,7 +15,7 @@ func NewWriter(w io.Writer) *Writer {
 	return &Writer{w: w}
 }
 
-func (w *Writer) WriteIndexEntry(apk *apkutils.ApkFile) {
+func (w *Writer) WriteApk(apk *apkutils.ApkFile) {
 	s := apk.ToIndexEntry()
 	io.WriteString(w.w, s)
 }

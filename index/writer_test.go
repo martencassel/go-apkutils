@@ -32,7 +32,7 @@ func TestWriteIndex(t *testing.T) {
 			if err != nil {
 				log.Fatalln("Error reading apk file:", err)
 			}
-			indexWriter.WriteIndexEntry(apkFile)
+			indexWriter.WriteApk(apkFile)
 		}
 	})
 }

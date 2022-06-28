@@ -28,8 +28,13 @@ fmt.Println(apk.ToIndexEntry())
 ```
 
 ## 2. Read apk index files
-TODO
-
+```go
+    f, err := os.Open("./testdata/APKINDEX")
+    if err != nil {
+        panic(err)
+    }
+    r := New
+```
 ## 3. Write apk index files
 ```go
    // List of apk names

@@ -1,4 +1,4 @@
-package apkutils
+package index
 
 import (
 	"archive/tar"
@@ -9,49 +9,15 @@ import (
 	"io"
 	"io/ioutil"
 	"strings"
+
+	apkutils "github.com/martencassel/go-apkutils"
 )
 
-/*
-	We want to be able to merge multiple APKINDEX files into one.
-*/
-const (
-	gzipID1     = 0x1f
-	gzipID2     = 0x8b
-	gzipDeflate = 8
-)
-
-type IndexEntry struct {
-	PullChecksum         string
-	PackageName          string
-	PackageVersion       string
-	PackageArchitecture  string
-	PackageSize          string
-	PackageInstalledSize string
-	PackageDescription   string
-	PackageUrl           string
-	PackageLicense       string
-	PackageOrigin        string
-	PackageMaintainer    string
-	BuildTimeStamp       string
-	GitCommitAport       string
-	PullDependencies     string
-	PackageProvides      string
-}
-
-func (entry *IndexEntry) String() string {
-	return fmt.Sprintf("C:%s\nP:%s\nV:%s\nA:%s\nS:%s\nI:%s\nT:%s\nU:%s\nL:%s\no:%s\nm:%s\nt:%s\nc:%s\nD:%s\np:%s\n\n",
-		entry.PullChecksum, entry.PackageName, entry.PackageVersion, entry.PackageArchitecture, entry.PackageSize, entry.PackageInstalledSize, entry.PackageDescription, entry.PackageUrl, entry.PackageLicense, entry.PackageOrigin, entry.PackageMaintainer, entry.BuildTimeStamp, entry.GitCommitAport, entry.PullDependencies, entry.PackageProvides)
-}
-
-type apkIndex struct {
-	Entries []*IndexEntry
-}
-
-func readApkIndex(f io.Reader) (*apkIndex, error) {
+func ReadApkIndex(f io.Reader) (*apkutils.ApkIndex, error) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(f)
 	// If the file is gzipped tar, we need to extract APKINDEX from the tar.
-	if ReadGzipHeader(buf.Bytes()) {
+	if readGzipHeader(buf.Bytes()) {
 		gr := bytes.NewReader(buf.Bytes())
 		uncompressedStream, err := gzip.NewReader(gr)
 		if err != nil {
@@ -77,9 +43,9 @@ func readApkIndex(f io.Reader) (*apkIndex, error) {
 	return index, nil
 }
 
-func parseApkIndex(buf *bytes.Buffer) *apkIndex {
+func parseApkIndex(buf *bytes.Buffer) *apkutils.ApkIndex {
 	scanner := bufio.NewScanner(strings.NewReader(buf.String()))
-	entries := make(map[string]*IndexEntry)
+	entries := make(map[string]*apkutils.IndexEntry)
 	checksum := ""
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -95,7 +61,7 @@ func parseApkIndex(buf *bytes.Buffer) *apkIndex {
 		switch lineTag {
 		case "C":
 			{
-				entry := &IndexEntry{
+				entry := &apkutils.IndexEntry{
 					PullChecksum: lineData,
 				}
 				entries[lineData] = entry
@@ -189,9 +155,16 @@ func parseApkIndex(buf *bytes.Buffer) *apkIndex {
 			}
 		}
 	}
-	v := make([]*IndexEntry, 0, len(entries))
+	v := make([]*apkutils.IndexEntry, 0, len(entries))
 	for _, value := range entries {
 		v = append(v, value)
 	}
-	return &apkIndex{Entries: v}
+	return &apkutils.ApkIndex{Entries: v}
+}
+
+func readGzipHeader(buf []byte) bool {
+	if buf[0] != apkutils.GzipID1 || buf[1] != apkutils.GzipID2 || buf[2] != apkutils.GzipDeflate {
+		return false
+	}
+	return true
 }

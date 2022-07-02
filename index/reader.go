@@ -13,6 +13,7 @@ import (
 	apkutils "github.com/martencassel/go-apkutils"
 )
 
+// ReadApkIndex reads an APKINDEX file to a ApkIndex struct.
 func ReadApkIndex(f io.Reader) (*apkutils.ApkIndex, error) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(f)
@@ -43,6 +44,7 @@ func ReadApkIndex(f io.Reader) (*apkutils.ApkIndex, error) {
 	return index, nil
 }
 
+// parseApkIndex parses an APKINDEX file into a ApkIndex struct.
 func parseApkIndex(buf *bytes.Buffer) *apkutils.ApkIndex {
 	scanner := bufio.NewScanner(strings.NewReader(buf.String()))
 	entries := make(map[string]*apkutils.IndexEntry)

@@ -15,6 +15,7 @@ import (
 	"github.com/martencassel/go-apkutils"
 )
 
+// ReadApk reads an ApkFile from the reader into an ApkFile struct.
 func ReadApk(r io.Reader) (*apkutils.ApkFile, error) {
 	apkFile, err := readApkFile(r)
 	if err != nil {
@@ -73,6 +74,7 @@ func readApkFile(f io.Reader) (*apkutils.ApkFile, error) {
 	}, nil
 }
 
+// readPkgInfo reads the .PKGINFO file and parses metadata from it.
 func readPkgInfo(buf *bytes.Buffer) (*apkutils.PkgInfo, error) {
 	pkgInfo := &apkutils.PkgInfo{}
 	scanner := bufio.NewScanner(strings.NewReader(buf.String()))

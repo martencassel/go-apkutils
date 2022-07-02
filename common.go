@@ -7,6 +7,7 @@ import (
 	"fmt"
 )
 
+// ReadGzipHeader reads the header of a gzip file if found.
 func ReadGzipHeader(buf []byte) bool {
 	if buf[0] != GzipID1 || buf[1] != GzipID2 || buf[2] != GzipDeflate {
 		return false
@@ -14,6 +15,10 @@ func ReadGzipHeader(buf []byte) bool {
 	return true
 }
 
+// TarGzip create a tar.gz file data from some source bytes.
+// Optionally, you can specify not to write an EnfOfTar header.
+// This function can be used to create signature.tar.gz files for signed APKINDEX files,
+// and APKINDEX.unsigned.tar.gz of an APKINDEX file.
 func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	nRead := len(b)
 	var buf bytes.Buffer

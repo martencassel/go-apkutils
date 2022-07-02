@@ -6,11 +6,12 @@ import (
 	"strings"
 )
 
-// ApkIndex is an APKINDEX header and payload
+// ApkIndex is a list of IndexEntries of an APKINDEX file.
 type ApkIndex struct {
 	Entries []*IndexEntry
 }
 
+// ToIndexEntry converts an ApkPkg (Package) to an index record in APKINDEX.
 func (apkFile *ApkFile) ToIndexEntry() string {
 	return fmt.Sprintf("C:%s\nP:%s\nV:%s\nA:%s\nS:%s\nI:%s\nT:%s\nU:%s\nL:%s\no:%s\nm:%s\nt:%s\nc:%s\nD:%s\np:%s\n\n",
 		apkFile.PullChecksum,                           // C
@@ -30,12 +31,14 @@ func (apkFile *ApkFile) ToIndexEntry() string {
 		strings.Join(apkFile.PkgInfo.PkgProvides, " ")) // p
 }
 
+// Signature bytes for finding GZIP header
 const (
 	GzipID1     = 0x1f
 	GzipID2     = 0x8b
 	GzipDeflate = 8
 )
 
+// IndexEntry is an APKINDEX entry, a record in a APKINDEX file.
 type IndexEntry struct {
 	PullChecksum         string
 	PackageName          string
@@ -54,17 +57,20 @@ type IndexEntry struct {
 	PackageProvides      string
 }
 
+// String converts an IndexEntry to a string
 func (entry *IndexEntry) String() string {
 	return fmt.Sprintf("C:%s\nP:%s\nV:%s\nA:%s\nS:%s\nI:%s\nT:%s\nU:%s\nL:%s\no:%s\nm:%s\nt:%s\nc:%s\nD:%s\np:%s\n\n",
 		entry.PullChecksum, entry.PackageName, entry.PackageVersion, entry.PackageArchitecture, entry.PackageSize, entry.PackageInstalledSize, entry.PackageDescription, entry.PackageUrl, entry.PackageLicense, entry.PackageOrigin, entry.PackageMaintainer, entry.BuildTimeStamp, entry.GitCommitAport, entry.PullDependencies, entry.PackageProvides)
 }
 
+// ApkFile is an APK file information with the derived PullChecksum.
 type ApkFile struct {
 	PullChecksum string
 	PkgInfo      *PkgInfo
 	PkgFileSize  int
 }
 
+// PkgInfo is the package info struct for .PKGINFO information from APK files.
 type PkgInfo struct {
 	PkgName       string
 	PkgVer        string

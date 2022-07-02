@@ -23,6 +23,7 @@ type Signer interface {
 	Sign(data []byte) ([]byte, error)
 }
 
+// rsaPrivateKey holds a rsa.PrivateKey.
 type rsaPrivateKey struct {
 	*rsa.PrivateKey
 }
@@ -36,6 +37,7 @@ func loadPrivateKey(path string) (Signer, error) {
 	return parsePrivateKey(data)
 }
 
+// parsePrivateKey creates a Signer from a private key in PEM format in pemBytes.
 func parsePrivateKey(pemBytes []byte) (Signer, error) {
 	block, _ := pem.Decode(pemBytes)
 	if block == nil {
@@ -55,6 +57,7 @@ func parsePrivateKey(pemBytes []byte) (Signer, error) {
 	return newSignerFromKey(rawkey)
 }
 
+// Sign signs some data using a private key using SHA1 digest.
 func (r *rsaPrivateKey) Sign(data []byte) ([]byte, error) {
 	h := sha1.New()
 	h.Write(data)
@@ -74,13 +77,14 @@ func newSignerFromKey(k interface{}) (Signer, error) {
 	return sshKey, nil
 }
 
+// Concat concatenates readers.
+// Used for concatenating signature.tar.gz and APKINDEX.unsigned.tar.gz.
 func Concat(b1 io.Reader, b2 io.Reader) io.Reader {
 	return io.MultiReader(b1, b2)
 }
 
-// Unsigned APKINDEX.tar.gz
-// openssl dgst -sha1 -sign privatekeyfile
-// 				      -out .SIGN.RSA.nameofpublickey APKINDEX.unsigned.tar.gz
+// SignApkIndex signs an APKINDEX file buffer using a sha1 digest using a prviate key file.
+// The resulting file has the name format .SIGN.RSA.<nameof-public-key>.
 func SignApkIndex(b []byte, signer Signer, pubkeyname string) (*bytes.Buffer, error) {
 	signedData, err := signer.Sign(b)
 	if err != nil {

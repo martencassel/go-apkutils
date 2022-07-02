@@ -9,6 +9,8 @@ import (
 
 	apkutils "github.com/martencassel/go-apkutils"
 	apk "github.com/martencassel/go-apkutils/apk"
+	"github.com/opencontainers/go-digest"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWriteIndex(t *testing.T) {
@@ -39,10 +41,17 @@ func TestWriteIndex(t *testing.T) {
 		}
 		indexWriter.Close()
 	})
+
+	b, err := ioutil.ReadFile("../testdata/APKINDEX")
+	if err != nil {
+		log.Fatalln("Error reading APKINDEX file:", err)
+	}
+	dgst := digest.FromBytes(b)
+	assert.Equal(t, 1612, len(b))
+	assert.True(t, dgst.String() == "sha256:d414cc87d7d15e0fdd2f9ebf360c70cb1c3688a04a8d49cdbaae4c5d4f93230a")
 }
 
 func TestWriteUnsignedApkindex(t *testing.T) {
-
 	t.Run("Write APKINDEX.unsigned.tar.gz", func(t *testing.T) {
 		// List of apk names
 		apkFile := []string{
@@ -69,5 +78,8 @@ func TestWriteUnsignedApkindex(t *testing.T) {
 			log.Fatalln("Error creating APKINDEX.unsigned.tar.gz:", err)
 		}
 		ioutil.WriteFile("../testdata/APKINDEX.unsigned.tar.gz", b, 0644)
+		dgst := digest.FromBytes(b)
+		assert.Equal(t, 822, len(b))
+		assert.True(t, dgst.String() == "sha256:0278e751afa33c33f651bc1f8c1d22d41d0f007ddceade29434b026c7b61aeef")
 	})
 }

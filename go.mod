@@ -2,7 +2,10 @@ module github.com/martencassel/go-apkutils
 
 go 1.18
 
-require github.com/stretchr/testify v1.7.5
+require (
+	github.com/opencontainers/go-digest v1.0.0
+	github.com/stretchr/testify v1.7.5
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect

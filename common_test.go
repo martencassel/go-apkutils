@@ -1,36 +1,29 @@
 package apkutils
 
 import (
-	"archive/tar"
+	"bufio"
 	"bytes"
-	"fmt"
-	"io"
+	"io/ioutil"
 	"testing"
+
+	digest "github.com/opencontainers/go-digest"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTarFile(t *testing.T) {
-	t.Run("Test TarFile 1", func(t *testing.T) {
+	t.Run("Test write a .tar.gz file", func(t *testing.T) {
 		var buf bytes.Buffer
-		tw := tar.NewWriter(&buf)
-		hdr := &tar.Header{
-			Name: "foobar.txt",
-			Mode: 0600,
-			Size: int64(len("Hello World")),
+		w := bufio.NewWriter(&buf)
+		w.WriteString("Hello World")
+		w.Flush()
+		n, result, err := TarGzip("test.tar.gz", buf.Bytes(), true)
+		if err != nil {
+			t.Fatal("Error writing tar file:", err)
 		}
-		tw.WriteHeader(hdr)
-		tw.Write([]byte("Hello World"))
-		tw.Close()
-
-		if int(hdr.Size) != len("Hello World") {
-			t.Errorf("Expected %d bytes, got %d", hdr.Size, buf.Len())
-		}
-		fmt.Println(buf.Bytes())
-		var buf2 bytes.Buffer
-		io.Copy(&buf2, &buf)
-		if buf2.Len() != 2048 {
-			t.Errorf("Expected %d bytes, got %d", buf.Len(), buf2.Len())
-		}
-		fmt.Println(buf2.Bytes())
+		dgst := digest.FromBytes(result)
+		ioutil.WriteFile("test.tar.gz", result, 0644)
+		assert.Equal(t, 11, n)
+		assert.True(t, dgst.String() == "sha256:1c5db109432161a7e01e5dcaba49a3b011749317dd1d54925ccf65df482f10d9")
 	})
 
 }

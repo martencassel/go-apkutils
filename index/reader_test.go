@@ -18,5 +18,6 @@ func TestReadIndex(t *testing.T) {
 			t.Fatal("Error reading APKINDEX file:", err)
 		}
 		assert.Equal(t, len(index.Entries), 3)
+		assert.Equal(t, "curl", index.Entries[0].PackageName)
 	})
 }

@@ -8,6 +8,8 @@ go-apkutils provides a few interfaces for handling alpine APK packages and APKIN
 
 There is a highlevel `Apk` and `ApkIndex` struct that provides access to package and index information.
 
+See [Examples](./examples) for some example code.
+
 ## 1. Extract metadata from an apk package file
 ```go
 	f, err := os.Open("curl-7.83.1-r1.apk")

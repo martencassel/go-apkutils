@@ -59,6 +59,7 @@ func writeApkIndex() {
 		}
 		w.WriteApk(apkFile)
 	}
+	w.Close()
 }
 
 func main() {

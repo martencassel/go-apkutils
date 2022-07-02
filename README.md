@@ -60,4 +60,5 @@ There is a highlevel `Apk` and `ApkIndex` struct that provides access to package
         }
         w.WriteApk(apkFile)
     }
+    w.Close()
 ```

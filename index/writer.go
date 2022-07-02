@@ -21,7 +21,8 @@ func (w *Writer) WriteApk(apk *apkutils.ApkFile) {
 }
 
 func (w *Writer) Write(entry *apkutils.IndexEntry) {
-	io.WriteString(w.w, entry.String())
+	data := entry.String()
+	io.WriteString(w.w, data)
 }
 
 func (w *Writer) Close() {

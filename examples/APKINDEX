@@ -1,0 +1,49 @@
+C:Q1dHNOerPc1tLPEYaP5dYIgzfGdto=
+P:curl
+V:7.83.1-r1
+A:x86_64
+S:136754
+I:262144
+T:URL retrival utility and library
+U:https://curl.se/
+L:curl
+o:curl
+m:Natanael Copa <ncopa@alpinelinux.org>
+t:1652300833
+c:9a859c886d12d1659d17a02f5ca58f589e247049
+D:ca-certificates so:libc.musl-x86_64.so.1 so:libcurl.so.4 so:libz.so.1
+p:cmd:curl=7.83.1-r1
+
+C:Q1T4i8BXF17XQ5E+kPx5mCOuWVfU4=
+P:gvim
+V:8.2.5000-r0
+A:x86_64
+S:9660675
+I:33095680
+T:advanced text editor, with GUI
+U:https://www.vim.org/
+L:Vim
+o:vim
+m:Natanael Copa <ncopa@alpinelinux.org>
+t:1653241285
+c:2dc89b8883d747b3d31941c199431489654b9f29
+D:xxd so:libICE.so.6 so:libSM.so.6 so:libX11.so.6 so:libXt.so.6 so:libc.musl-x86_64.so.1 so:libcairo.so.2 so:libgdk-3.so.0 so:libgdk_pixbuf-2.0.so.0 so:libgio-2.0.so.0 so:libglib-2.0.so.0 so:libgobject-2.0.so.0 so:libgtk-3.so.0 so:liblua-5.4.so.0 so:libncursesw.so.6 so:libpango-1.0.so.0 so:libpangocairo-1.0.so.0
+p:vim cmd:eview=8.2.5000-r0 cmd:evim=8.2.5000-r0 cmd:ex=8.2.5000-r0 cmd:gview=8.2.5000-r0 cmd:gvim=8.2.5000-r0 cmd:gvimdiff=8.2.5000-r0 cmd:gvimtutor=8.2.5000-r0 cmd:rgview=8.2.5000-r0 cmd:rgvim=8.2.5000-r0 cmd:rview=8.2.5000-r0 cmd:rvim=8.2.5000-r0 cmd:view=8.2.5000-r0 cmd:vim=8.2.5000-r0 cmd:vimdiff=8.2.5000-r0 cmd:vimtutor=8.2.5000-r0
+
+C:Q18y9jy9MgtvQFXTntDQ3if2axAkk=
+P:strace
+V:5.17-r0
+A:x86_64
+S:521102
+I:1708032
+T:Diagnostic, debugging and instructional userspace tracer
+U:https://strace.io
+L:BSD-3-Clause
+o:strace
+m:Natanael Copa <ncopa@alpinelinux.org>
+t:1648836354
+c:c826833736655b7ee3cd646b7dd6c7917848d6fe
+D:so:libc.musl-x86_64.so.1 so:libdw.so.1
+p:cmd:strace-log-merge=5.17-r0 cmd:strace=5.17-r0
+
+

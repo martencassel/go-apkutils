@@ -12,7 +12,7 @@ import (
 
 func TestSignApkIndex(t *testing.T) {
 	t.Run("Sign apkindex", func(t *testing.T) {
-		signer, err := loadPrivateKey("../testdata/my_key")
+		signer, err := LoadPrivateKey("../testdata/my_key")
 		if err != nil {
 			t.Fatal("Error loading private key:", err)
 		}

@@ -28,8 +28,8 @@ type rsaPrivateKey struct {
 	*rsa.PrivateKey
 }
 
-// loadPrivateKey loads an parses a PEM encoded private key file.
-func loadPrivateKey(path string) (Signer, error) {
+// LoadPrivateKey loads an parses a PEM encoded private key file and returns a Signer
+func LoadPrivateKey(path string) (Signer, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err

@@ -17,15 +17,15 @@ import (
 
 // ReadApk reads an ApkFile from the reader into an ApkFile struct.
 func ReadApk(r io.Reader) (*apkutils.ApkFile, error) {
-	apkFile, err := readApkFile(r)
+	apkFile, err := ReadApkFile(r)
 	if err != nil {
 		return nil, err
 	}
 	return apkFile, nil
 }
 
-// readApkFile reads the APK file and parses metadata from .PKGINFO and extracts the pull checksum and its size.
-func readApkFile(f io.Reader) (*apkutils.ApkFile, error) {
+// ReadApkFile reads the APK file and parses metadata from .PKGINFO and extracts the pull checksum and its size.
+func ReadApkFile(f io.Reader) (*apkutils.ApkFile, error) {
 	var pkgInfo *apkutils.PkgInfo
 	// https://stackoverflow.com/questions/38837679/alpine-apk-package-repositories-how-are-the-checksums-calculated
 	var pullChecksum string

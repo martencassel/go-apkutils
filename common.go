@@ -28,9 +28,6 @@ func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	defer gz.Close()
 	tw := tar.NewWriter(gz)
 	// Closing tar writer writes the EOF tail.
-	if writeEOFTar {
-		defer tw.Close()
-	}
 	tw.WriteHeader(&tar.Header{
 		Name: filepath.Base(filename),
 		Size: int64(nRead),
@@ -40,6 +37,9 @@ func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	fmt.Printf("Wrote %d bytes\n", n)
 	if err != nil {
 		return 0, nil, err
+	}
+	if writeEOFTar {
+		tw.Close()
 	}
 	gz.Close()
 	ret := buf.Bytes()

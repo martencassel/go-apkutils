@@ -16,6 +16,7 @@ func TestTarFile(t *testing.T) {
 		w := bufio.NewWriter(&buf)
 		w.WriteString("hello-world-1")
 		n1, result, err := TarGzip("hello1", buf.Bytes(), true)
+		assert.NoError(t, err)
 		if err != nil {
 			t.Fatal("Error writing tar file:", err)
 		}

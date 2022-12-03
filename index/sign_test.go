@@ -40,7 +40,9 @@ func TestSignApkIndex(t *testing.T) {
 		}
 		ioutil.WriteFile("../testdata/signature.tar.gz", signatureTarGz.Bytes(), 0644)
 		dgst := digest.FromBytes(signatureTarGz.Bytes())
-		assert.Equal(t, 85, signatureTarGz.Len())
-		assert.True(t, dgst.String() == "sha256:493a521b4a60ac2557f4b3b8c894a02bfe7caba216e709334c4f1cb10cf3b89c")
+		sigLength := signatureTarGz.Len()
+		dgstString := dgst.String()
+		assert.Equal(t, 237, sigLength)
+		assert.True(t, dgstString == "sha256:af9cb8a8b3e08cb8014cc2717bffca30ecf4e81a164552be34daa85a0816d324")
 	})
 }

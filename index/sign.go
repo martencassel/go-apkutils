@@ -103,8 +103,7 @@ func SignApkIndex(b []byte, signer Signer, pubkeyname string) (*bytes.Buffer, er
 	if n == 0 {
 		return nil, fmt.Errorf("source buffer is empty")
 	}
-	dst_signature_targz := &bytes.Buffer{} // signature.tar.gz
-	_, result, err := apkutils.TarGzip(sigFilename, dst_signature_targz.Bytes(), false)
+	_, result, err := apkutils.TarGzip(sigFilename, dst_signature.Bytes(), false)
 	if err != nil {
 		return nil, err
 	}

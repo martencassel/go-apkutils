@@ -32,6 +32,7 @@ func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	tw.WriteHeader(&tar.Header{
 		Name: filename,
 		Size: int64(nRead),
+		Mode: 0600,
 	})
 	n, err := tw.Write(b)
 	fmt.Printf("Wrote %d bytes\n", n)

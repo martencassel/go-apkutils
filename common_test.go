@@ -23,7 +23,7 @@ func TestTarFile(t *testing.T) {
 		dgst := digest.FromBytes(result)
 		ioutil.WriteFile("test.tar.gz", result, 0644)
 		assert.Equal(t, 11, n)
-		assert.True(t, dgst.String() == "sha256:1c5db109432161a7e01e5dcaba49a3b011749317dd1d54925ccf65df482f10d9")
+		assert.True(t, dgst.String() == "sha256:9e0e1c95ae9cafec545573dd6827fcff2e6587fea6aa9eacfae6d530e59a4150")
 	})
 
 }

@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"fmt"
+	"path/filepath"
 )
 
 // ReadGzipHeader reads the header of a gzip file if found.
@@ -26,11 +27,12 @@ func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	gz := gzip.NewWriter(&buf)
 	defer gz.Close()
 	tw := tar.NewWriter(gz)
+	// Closing tar writer writes the EOF tail.
 	if writeEOFTar {
 		defer tw.Close()
 	}
 	tw.WriteHeader(&tar.Header{
-		Name: filename,
+		Name: filepath.Base(filename),
 		Size: int64(nRead),
 		Mode: 0600,
 	})
@@ -39,7 +41,6 @@ func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	if err != nil {
 		return 0, nil, err
 	}
-	tw.Close()
 	gz.Close()
 	ret := buf.Bytes()
 	return n, ret, nil

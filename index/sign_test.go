@@ -27,13 +27,11 @@ func TestSignApkIndex(t *testing.T) {
 		}
 		filesize := fileinfo.Size()
 		buffer := make([]byte, filesize)
-		bytesread, err := unsignedTarGz.Read(buffer)
+		_, err = unsignedTarGz.Read(buffer)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println("bytes read: ", bytesread)
-		fmt.Println("bytestream to string: ", string(buffer))
 		signatureTarGz, err := SignApkIndex(buffer, signer, "publickeyname")
 		if err != nil {
 			t.Fatal(err)
@@ -42,7 +40,7 @@ func TestSignApkIndex(t *testing.T) {
 		dgst := digest.FromBytes(signatureTarGz.Bytes())
 		sigLength := signatureTarGz.Len()
 		dgstString := dgst.String()
-		assert.Equal(t, 237, sigLength)
-		assert.True(t, dgstString == "sha256:af9cb8a8b3e08cb8014cc2717bffca30ecf4e81a164552be34daa85a0816d324")
+		assert.Equal(t, 225, sigLength)
+		assert.True(t, dgstString == "sha256:ef39835e96f3ead633e64c543f915a50e87d101277673f7734dfb5857084d7c0")
 	})
 }

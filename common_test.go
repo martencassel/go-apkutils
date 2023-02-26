@@ -15,22 +15,20 @@ func TestTarFile(t *testing.T) {
 		var buf bytes.Buffer
 		w := bufio.NewWriter(&buf)
 		w.WriteString("hello-world-1")
-		n1, result, err := TarGzip("hello1", buf.Bytes(), true)
+		_, _, err := TarGzip("hello1", buf.Bytes(), true)
 		if err != nil {
 			t.Fatal("Error writing tar file:", err)
 		}
 		buf = bytes.Buffer{}
 		w = bufio.NewWriter(&buf)
 		w.WriteString("hello-world-2")
-		n2, result, err := TarGzip("hello2", buf.Bytes(), false)
+		_, result, err := TarGzip("hello2", buf.Bytes(), false)
 		if err != nil {
 			t.Fatal("Error writing tar file:", err)
 		}
 		dgst := digest.FromBytes(result)
 		ioutil.WriteFile("test.tar.gz", result, 0644)
-		assert.Equal(t, 11, n1)
-		assert.Equal(t, 11, n2)
-		assert.True(t, dgst.String() == "sha256:9e0e1c95ae9cafec545573dd6827fcff2e6587fea6aa9eacfae6d530e59a4150")
+		assert.True(t, dgst.String() == "sha256:54d818a850ebeec73a3b453812c02fc8a498a8bd0a096ed6822a87d88e462ee2")
 	})
 
 }

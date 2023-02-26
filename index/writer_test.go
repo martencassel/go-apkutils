@@ -79,7 +79,7 @@ func TestWriteUnsignedApkindex(t *testing.T) {
 		}
 		ioutil.WriteFile("../testdata/APKINDEX.unsigned.tar.gz", b, 0644)
 		dgst := digest.FromBytes(b)
-		assert.Equal(t, 822, len(b))
-		assert.True(t, dgst.String() == "sha256:0278e751afa33c33f651bc1f8c1d22d41d0f007ddceade29434b026c7b61aeef")
+		assert.Equal(t, 810, len(b))
+		assert.True(t, dgst.String() == "sha256:c16be7a31589ca77bab1a76efd4d53908fc24d00ce058f18ef2d8ff816abc0e1")
 	})
 }

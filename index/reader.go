@@ -47,12 +47,18 @@ func ReadApkIndex(f io.Reader) (*apkutils.ApkIndex, error) {
 // parseApkIndex parses an APKINDEX file into a ApkIndex struct.
 func parseApkIndex(buf *bytes.Buffer) *apkutils.ApkIndex {
 	scanner := bufio.NewScanner(strings.NewReader(buf.String()))
-	entries := make(map[string]*apkutils.IndexEntry)
-	checksum := ""
+	var indexEntries []apkutils.IndexEntry
+	var curEntry apkutils.IndexEntry
+	pkgSet := make(map[string]int)
 	for scanner.Scan() {
 		line := scanner.Text()
 		s := string(line)
 		if s == "" {
+			if pkgSet[curEntry.PullChecksum] == 1 {
+				continue
+			}
+			pkgSet[curEntry.PullChecksum] += 1
+			indexEntries = append(indexEntries, curEntry)
 			continue
 		}
 		if line[1] != ':' {
@@ -63,103 +69,82 @@ func parseApkIndex(buf *bytes.Buffer) *apkutils.ApkIndex {
 		switch lineTag {
 		case "C":
 			{
-				entry := &apkutils.IndexEntry{
+				curEntry = apkutils.IndexEntry{
 					PullChecksum: lineData,
 				}
-				entries[lineData] = entry
-				checksum = lineData
 				break
 			}
 		case "P":
 			{
-				fmt.Println(lineData)
-				record := entries[checksum]
-				record.PackageName = lineData
+				curEntry.PackageName = lineData
 				break
 			}
 		case "V":
 			{
-				record := entries[checksum]
-				record.PackageVersion = lineData
+				curEntry.PackageVersion = lineData
 				break
 			}
 		case "A":
 			{
-				record := entries[checksum]
-				record.PackageArchitecture = lineData
+				curEntry.PackageArchitecture = lineData
 				break
 			}
 		case "S":
 			{
-				record := entries[checksum]
-				record.PackageSize = lineData
+				curEntry.PackageSize = lineData
 				break
 			}
 		case "I":
 			{
-				record := entries[checksum]
-				record.PackageInstalledSize = lineData
+				curEntry.PackageInstalledSize = lineData
 				break
 			}
 		case "T":
 			{
-				record := entries[checksum]
-				record.PackageDescription = lineData
+				curEntry.PackageDescription = lineData
 				break
 			}
 		case "U":
 			{
-				record := entries[checksum]
-				record.PackageUrl = lineData
+				curEntry.PackageUrl = lineData
 				break
 			}
 		case "L":
 			{
-				record := entries[checksum]
-				record.PackageLicense = lineData
+				curEntry.PackageLicense = lineData
 				break
 			}
 		case "o":
 			{
-				record := entries[checksum]
-				record.PackageOrigin = lineData
+				curEntry.PackageOrigin = lineData
 				break
 			}
 		case "m":
 			{
-				record := entries[checksum]
-				record.PackageMaintainer = lineData
+				curEntry.PackageMaintainer = lineData
 				break
 			}
 		case "t":
 			{
-				record := entries[checksum]
-				record.BuildTimeStamp = lineData
+				curEntry.BuildTimeStamp = lineData
 				break
 			}
 		case "c":
 			{
-				record := entries[checksum]
-				record.GitCommitAport = lineData
+				curEntry.GitCommitAport = lineData
 				break
 			}
 		case "D":
 			{
-				record := entries[checksum]
-				record.PullDependencies = lineData
+				curEntry.PullDependencies = lineData
 				break
 			}
 		case "p":
 			{
-				record := entries[checksum]
-				record.PackageProvides = lineData
+				curEntry.PackageProvides = lineData
 				break
 			}
 		}
 	}
-	v := make([]*apkutils.IndexEntry, 0, len(entries))
-	for _, value := range entries {
-		v = append(v, value)
-	}
-	return &apkutils.ApkIndex{Entries: v}
+	return &apkutils.ApkIndex{Entries: indexEntries}
 }

@@ -90,7 +90,6 @@ func SignApkIndex(b []byte, signer Signer, pubkeyname string) (*bytes.Buffer, er
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(signedData)
 	// tar -c .SIGN.RSA.nameofpublickey | abuild-tar --cut | gzip -9 > signature.tar.gz
 	sigFilename := fmt.Sprintf(".SIGN.%s", pubkeyname)
 	//var src_signature bytes.Buffer // .SIGN.RSA.nameofpublickey

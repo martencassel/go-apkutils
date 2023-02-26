@@ -8,7 +8,7 @@ import (
 
 // ApkIndex is a list of IndexEntries of an APKINDEX file.
 type ApkIndex struct {
-	Entries []*IndexEntry
+	Entries []IndexEntry
 }
 
 // ToIndexEntry converts an ApkPkg (Package) to an index record in APKINDEX.

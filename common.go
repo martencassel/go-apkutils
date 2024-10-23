@@ -11,7 +11,7 @@ import (
 // ReadGzipHeader reads the header of a gzip file if found.
 func ReadGzipHeader(buf []byte) bool {
 	switch {
-	case buf[0] != GzipID1:
+	case len(buf) >= 1 && buf[0] != GzipID1:
 		return false
 	case len(buf) >= 2 && buf[1] != GzipID2:
 		return false

@@ -36,9 +36,9 @@ func TestTarFile(t *testing.T) {
 func TestReadGzipHeader(t *testing.T) {
 	t.Run("Test ReadGzipHeader returns true when all Ids and deflate flags are present", func(t *testing.T) {
 		buff := []byte{
-			31,
-			139,
-			8,
+			GzipID1,
+			GzipID2,
+			GzipDeflate,
 		}
 		want := true
 

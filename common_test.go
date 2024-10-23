@@ -60,4 +60,15 @@ func TestReadGzipHeader(t *testing.T) {
 			t.Errorf("Invalid response from ReadGzipHeader, got: %v, want: %v", got, want)
 		}
 	})
+
+	t.Run("Test ReadGzipHeader with buffer of length 0", func(t *testing.T) {
+		// This test covers if there is a panic
+		buff := []byte{}
+		want := false
+
+		got := ReadGzipHeader(buff)
+		if got != want {
+			t.Errorf("Invalid response from ReadGzipHeader, got: %v, want: %v", got, want)
+		}
+	})
 }

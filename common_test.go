@@ -46,12 +46,22 @@ func TestReadGzipHeader(t *testing.T) {
 		assert.Equal(t, got, want)
 
 	})
+
 	t.Run("Test ReadGzipHeader with buffer size less than 3", func(t *testing.T) {
 		// This test covers if there is a panic
 		buff := []byte{
 			7,
 			31,
 		}
+		want := false
+
+		got := ReadGzipHeader(buff)
+		assert.Equal(t, got, want)
+	})
+
+	t.Run("Test ReadGzipHeader with buffer of length 1", func(t *testing.T) {
+		// This test covers if there is a panic
+		buff := []byte{1}
 		want := false
 
 		got := ReadGzipHeader(buff)
@@ -67,12 +77,4 @@ func TestReadGzipHeader(t *testing.T) {
 		assert.Equal(t, got, want)
 	})
 
-	t.Run("Test ReadGzipHeader with buffer of length 1", func(t *testing.T) {
-		// This test covers if there is a panic
-		buff := []byte{1}
-		want := false
-
-		got := ReadGzipHeader(buff)
-		assert.Equal(t, got, want)
-	})
 }

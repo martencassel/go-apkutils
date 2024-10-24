@@ -9,7 +9,11 @@ import (
 )
 
 // ReadGzipHeader reads the header of a gzip file if found.
+// There are 3 signature bytes that occur in a specific order.
 func ReadGzipHeader(buf []byte) bool {
+	if len(buf) < 3 {
+		return false
+	}
 	if buf[0] != GzipID1 || buf[1] != GzipID2 || buf[2] != GzipDeflate {
 		return false
 	}

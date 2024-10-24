@@ -32,3 +32,49 @@ func TestTarFile(t *testing.T) {
 	})
 
 }
+
+func TestReadGzipHeader(t *testing.T) {
+	t.Run("Test ReadGzipHeader returns true when all Ids and deflate flags are present", func(t *testing.T) {
+		buff := []byte{
+			GzipID1,
+			GzipID2,
+			GzipDeflate,
+		}
+		want := true
+
+		got := ReadGzipHeader(buff)
+		assert.Equal(t, got, want)
+
+	})
+
+	t.Run("Test ReadGzipHeader with buffer size less than 3", func(t *testing.T) {
+		// This test covers if there is a panic
+		buff := []byte{
+			7,
+			31,
+		}
+		want := false
+
+		got := ReadGzipHeader(buff)
+		assert.Equal(t, got, want)
+	})
+
+	t.Run("Test ReadGzipHeader with buffer of length 1", func(t *testing.T) {
+		// This test covers if there is a panic
+		buff := []byte{1}
+		want := false
+
+		got := ReadGzipHeader(buff)
+		assert.Equal(t, got, want)
+	})
+
+	t.Run("Test ReadGzipHeader with buffer of length 0", func(t *testing.T) {
+		// This test covers if there is a panic
+		buff := []byte{}
+		want := false
+
+		got := ReadGzipHeader(buff)
+		assert.Equal(t, got, want)
+	})
+
+}

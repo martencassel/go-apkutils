@@ -45,6 +45,9 @@ func ReadApkFile(f io.Reader) (*apkutils.ApkFile, error) {
 			offsets = append(offsets, i)
 		}
 	}
+	if len(offsets) < 3 {
+		return nil, fmt.Errorf("invalid apk file")
+	}
 	block2 := bytes_[offsets[1]:offsets[2]]
 	Sha1CheckSum := sha1.Sum(block2)
 	str := base64.StdEncoding.EncodeToString(Sha1CheckSum[:20])

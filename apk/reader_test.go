@@ -1,6 +1,7 @@
 package apk
 
 import (
+	"bytes"
 	"log"
 	"os"
 	"testing"
@@ -9,6 +10,18 @@ import (
 )
 
 func TestOpenApkFile(t *testing.T) {
+
+	t.Run("dont_panic_on_junk_files", func(t *testing.T) {
+		b := []byte("hello junk")
+		br := bytes.NewReader(b)
+		_, err := ReadApk(br)
+		assert.Error(t, err)
+
+		b = []byte("abc")
+		br = bytes.NewReader(b)
+		_, err = ReadApk(br)
+		assert.Error(t, err)
+	})
 	t.Run("Reading an empty file should return an error", func(t *testing.T) {
 		filename := "../testdata/empty.apk"
 		f, err := os.Open(filename)

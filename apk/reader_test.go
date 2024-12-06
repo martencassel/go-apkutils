@@ -9,6 +9,25 @@ import (
 )
 
 func TestOpenApkFile(t *testing.T) {
+	t.Run("Reading an empty file should return an error", func(t *testing.T) {
+		filename := "../testdata/empty.apk"
+		f, err := os.Open(filename)
+		if err != nil {
+			log.Fatalln("Error opening file:", err)
+		}
+		_, err = ReadApk(f)
+		assert.Error(t, err)
+	})
+
+	t.Run("Read a directory should return an error", func(t *testing.T) {
+		filename := "../testdata"
+		f, err := os.Open(filename)
+		if err != nil {
+			log.Fatalln("Error opening file:", err)
+		}
+		_, err = ReadApk(f)
+		assert.Error(t, err)
+	})
 	t.Run("Open a APK file", func(t *testing.T) {
 		filename := "../testdata/curl-7.83.1-r1.apk"
 		f, err := os.Open(filename)

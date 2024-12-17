@@ -30,7 +30,13 @@ func ReadApkFile(f io.Reader) (*apkutils.ApkFile, error) {
 	// https://stackoverflow.com/questions/38837679/alpine-apk-package-repositories-how-are-the-checksums-calculated
 	var pullChecksum string
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(f)
+	n, err := buf.ReadFrom(f)
+	if err != nil {
+		return nil, err
+	}
+	if n == 0 {
+		return nil, fmt.Errorf("empty file")
+	}
 	packageFileSize := len(buf.Bytes())
 	bytes_ := buf.Bytes()
 	var offsets []int
@@ -38,6 +44,9 @@ func ReadApkFile(f io.Reader) (*apkutils.ApkFile, error) {
 		if apkutils.ReadGzipHeader(bytes_[i:]) {
 			offsets = append(offsets, i)
 		}
+	}
+	if len(offsets) < 3 {
+		return nil, fmt.Errorf("invalid apk file")
 	}
 	block2 := bytes_[offsets[1]:offsets[2]]
 	Sha1CheckSum := sha1.Sum(block2)

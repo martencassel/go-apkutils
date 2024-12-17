@@ -4,7 +4,6 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
-	"fmt"
 	"path/filepath"
 )
 
@@ -27,25 +26,27 @@ func ReadGzipHeader(buf []byte) bool {
 func TarGzip(filename string, b []byte, writeEOFTar bool) (int, []byte, error) {
 	nRead := len(b)
 	var buf bytes.Buffer
-	//	io.Copy(&buf, bytes.NewReader(b))
 	gz := gzip.NewWriter(&buf)
-	defer gz.Close()
 	tw := tar.NewWriter(gz)
-	// Closing tar writer writes the EOF tail.
-	if writeEOFTar {
-		defer tw.Close()
-	}
 	tw.WriteHeader(&tar.Header{
 		Name: filepath.Base(filename),
 		Size: int64(nRead),
 		Mode: 0600,
 	})
 	n, err := tw.Write(b)
-	fmt.Printf("Wrote %d bytes\n", n)
 	if err != nil {
 		return 0, nil, err
 	}
-	gz.Close()
+	if writeEOFTar {
+		err = tw.Close()
+		if err != nil {
+			return 0, nil, err
+		}
+	}
+	err = gz.Close()
+	if err != nil {
+		return 0, nil, err
+	}
 	ret := buf.Bytes()
 	return n, ret, nil
 }

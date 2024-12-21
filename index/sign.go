@@ -34,11 +34,11 @@ func LoadPrivateKey(path string) (Signer, error) {
 	if err != nil {
 		return nil, err
 	}
-	return parsePrivateKey(data)
+	return ParsePrivateKey(data)
 }
 
 // parsePrivateKey creates a Signer from a private key in PEM format in pemBytes.
-func parsePrivateKey(pemBytes []byte) (Signer, error) {
+func ParsePrivateKey(pemBytes []byte) (Signer, error) {
 	block, _ := pem.Decode(pemBytes)
 	if block == nil {
 		return nil, errors.New("ssh: no key found")
